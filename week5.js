@@ -49,13 +49,14 @@ const app = createApp({
       userModal.value.open()
     };
     const addToCart = (product_id, qty = 1) => {
+      status.value.loadingItem = product_id;
       const order = {
         product_id,
         qty
       }
       const url = `${apiUrl}/api/${apiPath}/cart`;
       axios.post(url, { data: order }).then((res) => {
-        console.log(res);
+        status.value.loadingItem = ''
         alert(res.data.message);
         getCart();
         userModal.value.close()
@@ -66,20 +67,18 @@ const app = createApp({
         product_id: item.product_id,
         qty
       }
-      status.value.loadingItem = item.id
+      status.value.loadingItem = item.id;
       const url = `${apiUrl}/api/${apiPath}/cart/${item.id}`;
       axios.put(url, { data: order }).then((res) => {
-        console.log(res);
         status.value.loadingItem = ''
         // alert(res.data.message);
         getCart();
       })
     };
     const removeCartItem = (id) => {
-      status.value.loadingItem = id
+      status.value.loadingItem = id;
       const url = `${apiUrl}/api/${apiPath}/cart/${id}`;
       axios.delete(url).then((res) => {
-        console.log(res);
         status.value.loadingItem = ''
         alert(res.data.message);
         getCart();
@@ -88,7 +87,6 @@ const app = createApp({
     const removeCartAllItem = () => {
       const url = `${apiUrl}/api/${apiPath}/carts`;
       axios.delete(url).then((res) => {
-        console.log(res);
         alert('確定要清空購物車?');
         getCart();
       })
@@ -110,7 +108,6 @@ const app = createApp({
       }).catch((err) => {
         alert(err.response.data.message);
       });
-      console.log(order);
     };
 
     onMounted(() => {
